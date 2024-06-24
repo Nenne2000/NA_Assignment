@@ -3,7 +3,7 @@ import networkx as nx
 
 def snowball_sampling(G, num_nodes):
     sampled_nodes = set()
-    frontier = {'2300'}
+    frontier = {'2300', '8306', '1876','2622'}
     while len(sampled_nodes) < num_nodes and frontier:
         new_node = frontier.pop()
         sampled_nodes.add(new_node)
