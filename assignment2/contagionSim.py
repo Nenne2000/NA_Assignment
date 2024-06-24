@@ -18,9 +18,9 @@ def plot_network_states(iteration, G, pos, labels, colors, output_directory):
     plt.close()
 
 def plot_state_histogram(iteration, labels, output_directory):
-    states = ["NotInformed", "Gossipier", "Malicious"]
+    states = ["NotInformed","Gossipier", "Malicious"]
     counts = [list(labels.values()).count(state) for state in ['N', 'G', 'M']]
-    colors = ['blue', 'green', 'red']
+    colors = ['blue','green', 'red']
 
     plt.figure(figsize=(8, 6))
     plt.bar(states, counts, color=colors)
@@ -71,12 +71,11 @@ def initialize_information(G):
     return {node: '' for node in G.nodes()}
 
 def initialize_gossipiers_and_malicious_nodes(G, num_gossipier, num_malicious):
-    #node_list = list(G.nodes())
-    #initial_informed = rand.sample(node_list, k=num_gossipier)
-    #remaining_nodes = list(set(node_list) - set(initial_informed))
-    #malicious_nodes = rand.sample(remaining_nodes, k=num_malicious)
-    #return initial_informed, malicious_nodes
-    return ['2300'], []
+    node_list = list(G.nodes())
+    initial_informed = rand.sample(node_list, k=num_gossipier)
+    remaining_nodes = list(set(node_list) - set(initial_informed))
+    malicious_nodes = rand.sample(remaining_nodes, k=num_malicious)
+    return initial_informed, malicious_nodes
 
 def spread_information(G, labels, information, threshold):
     new_labels = labels.copy()
@@ -89,7 +88,6 @@ def spread_information(G, labels, information, threshold):
             neighbors = list(G.neighbors(node))
             informed_neighbors = sum(1 for n in neighbors if labels[n] in ['G', 'M'])
             if informed_neighbors / len(neighbors) >= threshold:
-                # se la maggioranza dei vicini è malicius allora il nodo diventa malizioso
                 if sum(1 for n in neighbors if labels[n] == 'M') >= len(neighbors) / 2:
                     new_labels[node] = 'M'
                     for n in neighbors:
@@ -104,13 +102,21 @@ def spread_information(G, labels, information, threshold):
                             break
 
                 spreading = True
+        elif labels[node] == 'NM':
+            neighbors = list(G.neighbors(node))
+            informed_neighbors = sum(1 for n in neighbors if labels[n] in ['G', 'M'])
+            if informed_neighbors / len(neighbors) >= threshold:
+                new_labels[node] = 'M'
+                new_information[node] = information[node]
+
+                spreading = True
     
     return new_labels, spreading, new_information
 
 # ------------------------------------ Parametri del modello ------------------------------------
-threshold = 0.5 #soglia di trasmissione dell'informazione
+threshold = 0.1 #soglia di trasmissione dell'informazione
 num_gossipier = 1 #numero di nodi inizialmente informati
-num_malicious = 0 #numero di nodi malicious
+num_malicious = 500 #numero di nodi malicious
 possible_malicious_information = ['Helao world!', 'Hella world!', 'Hello worid!', 'Hello vorld!', 'Hello woqld!']
 # -----------------------------------------------------------------------------------------------
 
@@ -133,10 +139,10 @@ def main():
         information[node] = 'Hello world!'
 
     for node in malicious_nodes:
-        labels[node] = 'M'
+        labels[node] = 'NM' #malicious node not allowed to spread information
         information[node] = rand.choice(possible_malicious_information)
 
-    colors = {'N': 'blue', 'G': 'green', 'M': 'red'}
+    colors = {'N': 'blue', 'NM': 'grey', 'G': 'green', 'M': 'red'}
 
     num_iterations = 0
     spreading = True
