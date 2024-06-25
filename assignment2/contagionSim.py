@@ -113,12 +113,11 @@ def spread_information(G, labels, information, threshold):
     
     return new_labels, spreading, new_information
 
-# ------------------------------------ Parametri del modello ------------------------------------
+#Parametri del modello
 threshold = 0.1 #soglia di trasmissione dell'informazione
 num_gossipier = 1 #numero di nodi inizialmente informati
 num_malicious = 500 #numero di nodi malicious
 possible_malicious_information = ['Helao world!', 'Hella world!', 'Hello worid!', 'Hello vorld!', 'Hello woqld!']
-# -----------------------------------------------------------------------------------------------
 
 
 def main():
