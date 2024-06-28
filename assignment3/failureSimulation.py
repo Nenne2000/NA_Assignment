@@ -50,12 +50,11 @@ def betweenness_failures(G, node_count):
 
 
 def main():
-    #G = nx.erdos_renyi_graph(500, 0.1)
-    #G = nx.read_edgelist("assignment2/sampled_graph.edges")
+    G = nx.read_edgelist("assignment3/sampled_graph.edges")
     #G = nx.karate_club_graph()
-    G = nx.barabasi_albert_graph(500, 3)
+    #G = nx.barabasi_albert_graph(2000, 3)
     node_to_remove_each_time = 1
-    iteration = 50
+    iteration = 20
 
     print("componente gigante:", len(max(nx.connected_components(G), key=len)))
 
@@ -71,11 +70,12 @@ def main():
     G_pagerank = G.copy()
     pagerank = [pagerank_failures(G_pagerank, node_to_remove_each_time) for i in range(iteration)]
 
-    print("random", random)
-    print("degree", degree)
-    print("betweenness", betweenness)
-    print("pagerank", pagerank)
     dataplot(random, degree, betweenness, pagerank)
+
+
+    #G = nx.read_edgelist("assignment3/data/improved_graph_degree.edges")
+    #G = nx.read_edgelist("assignment3/data/improved_graph_peripheral.edges")
+    #G = nx.read_edgelist("assignment3/data/improved_graph_betweenness.edges")
 
 
 if __name__ == "__main__":
