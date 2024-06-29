@@ -45,9 +45,9 @@ def improve_robustness_betweenness_edges(G, num_edges):
 
 
 def main():
-    #G = nx.read_edgelist("assignment3/sampled_graph.edges")
-    G = nx.karate_club_graph()
-    num_edges = 50
+    G = nx.read_edgelist("assignment3/sampled_graph.edges")
+    #G = nx.karate_club_graph()
+    num_edges = 1000
     G_degree = improve_robustness_high_degree_edges(G, num_edges)
     G_peripheral = improve_robustness_peripheral_edges(G, num_edges)
     G_betweenness = improve_robustness_betweenness_edges(G, num_edges)

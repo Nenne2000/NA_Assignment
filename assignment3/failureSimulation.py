@@ -1,7 +1,9 @@
+import statistics
 import networkx as nx
 import random
 import matplotlib.pyplot as plt
 import numpy as np
+from scipy import stats
 
 def dataplot(random, degree, betweenness, pagerank):
 
@@ -20,6 +22,15 @@ def dataplot(random, degree, betweenness, pagerank):
 
 def size(G):
     return len(max(nx.connected_components(G), key=len))
+
+def critical_threshold(G):
+    nodes = []
+    for _, degree in G.degree():
+        nodes.append(degree)
+    second_moment = stats.moment(nodes, moment=2)
+    avg_degree = statistics.mean(nodes)
+    critical_threshold = 1-(1/(second_moment /avg_degree-1))
+    return critical_threshold
 
 def random_failures(G, n):
     nodes = list(G.nodes())
@@ -56,8 +67,7 @@ def main():
     node_to_remove_each_time = 1
     iteration = 20
 
-    print("componente gigante:", len(max(nx.connected_components(G), key=len)))
-
+    '''
     G_random = G.copy()
     random = [random_failures(G_random, node_to_remove_each_time) for i in range(iteration)]
 
@@ -71,11 +81,17 @@ def main():
     pagerank = [pagerank_failures(G_pagerank, node_to_remove_each_time) for i in range(iteration)]
 
     dataplot(random, degree, betweenness, pagerank)
+    '''
 
+    G_a = nx.read_edgelist("assignment3/data/improved_graph_degree.edges")
+    G_b = nx.read_edgelist("assignment3/data/improved_graph_peripheral.edges")
+    G_c = nx.read_edgelist("assignment3/data/improved_graph_betweenness.edges")
 
-    #G = nx.read_edgelist("assignment3/data/improved_graph_degree.edges")
-    #G = nx.read_edgelist("assignment3/data/improved_graph_peripheral.edges")
-    #G = nx.read_edgelist("assignment3/data/improved_graph_betweenness.edges")
+    print(critical_threshold(G))
+    print(critical_threshold(G_a))
+    print(critical_threshold(G_b))
+    print(critical_threshold(G_c))
+
 
 
 if __name__ == "__main__":
