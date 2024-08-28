@@ -67,7 +67,6 @@ def main():
     node_to_remove_each_time = 1
     iteration = 20
 
-    '''
     G_random = G.copy()
     random = [random_failures(G_random, node_to_remove_each_time) for i in range(iteration)]
 
@@ -81,7 +80,6 @@ def main():
     pagerank = [pagerank_failures(G_pagerank, node_to_remove_each_time) for i in range(iteration)]
 
     dataplot(random, degree, betweenness, pagerank)
-    '''
 
     G_a = nx.read_edgelist("assignment3/data/improved_graph_degree.edges")
     G_b = nx.read_edgelist("assignment3/data/improved_graph_peripheral.edges")
